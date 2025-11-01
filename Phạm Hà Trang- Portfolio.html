@@ -1,0 +1,447 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Phạm Hà Trang - Portfolio Cosmic Aesthetic 🌌</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+  <style>
+    :root {
+      --accent: #ff5c8a;
+      --bg-dark: rgba(18, 18, 18, 0.85);
+      --text-light: #f8f8f8;
+      --text-gray: #b9b9b9;
+    }
+
+    body {
+      margin: 0;
+      font-family: 'Inter', sans-serif;
+      background: #0e0e0e;
+      color: var(--text-light);
+      overflow: hidden;
+    }
+
+    /* Slideshow */
+    #slideshow {
+      position: relative;
+      width: 100vw;
+      height: 100vh;
+      overflow: hidden;
+    }
+
+    .slide {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      background-color: var(--bg-dark);
+      opacity: 0;
+      transition: opacity 0.7s ease, transform 0.6s ease;
+      transform: translateX(100%);
+      padding: 3rem;
+    }
+
+    .slide.active {
+      opacity: 1;
+      transform: translateX(0);
+    }
+
+    .slide.prev {
+      transform: translateX(-100%);
+    }
+
+    .slide-title {
+      font-size: 2.4rem;
+      color: var(--accent);
+      margin-bottom: 1rem;
+      text-shadow: 0 0 15px rgba(255, 92, 138, 0.4);
+    }
+
+    .slide-content {
+      font-size: 1.1rem;
+      color: var(--text-gray);
+      max-width: 850px;
+      line-height: 1.8;
+      margin: 0 auto;
+    }
+
+    .slide-subtext {
+      font-size: 0.9rem;
+      color: rgba(255, 255, 255, 0.5);
+      margin-top: 0.3rem;
+      font-style: italic;
+    }
+
+    /* Layout aesthetic cho slide có ảnh + text */
+    .content-with-image {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 3rem;
+      flex-wrap: wrap;
+      margin-top: 2rem;
+      max-width: 1100px;
+      background: rgba(255, 255, 255, 0.03);
+      border-radius: 2rem;
+      padding: 2rem 3rem;
+      box-shadow: 0 0 30px rgba(255, 92, 138, 0.08);
+    }
+
+    .content-with-image ul {
+      flex: 1;
+      min-width: 320px;
+      text-align: left;
+    }
+
+    .content-with-image li {
+      margin-bottom: 1rem;
+      padding-left: 0.5rem;
+    }
+
+    .content-with-image img {
+      flex: 1;
+      min-width: 300px;
+      max-width: 420px;
+      border-radius: 1.5rem;
+      box-shadow: 0 8px 25px rgba(255, 92, 138, 0.25);
+      border: 2px solid rgba(255, 92, 138, 0.2);
+      opacity: 0;
+      transform: translateY(20px);
+      animation: fadeIn 1.2s ease forwards;
+    }
+
+    @keyframes fadeIn {
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    /* Project Grid aesthetic */
+    .project-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 2rem;
+      margin-top: 2rem;
+      max-width: 1000px;
+    }
+
+    .project-card {
+      background: rgba(255, 255, 255, 0.06);
+      border-radius: 1.5rem;
+      overflow: hidden;
+      backdrop-filter: blur(8px);
+      transition: all 0.4s ease;
+    }
+
+    .project-card:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 8px 25px rgba(255, 92, 138, 0.25);
+    }
+
+    .project-card img {
+      width: 100%;
+      height: 200px;
+      object-fit: cover;
+      transition: all 0.5s ease;
+    }
+
+    .project-card img:hover {
+      transform: scale(1.05);
+      filter: brightness(1.1);
+    }
+
+    .project-info {
+      padding: 1.2rem;
+      text-align: left;
+    }
+
+    .project-info h3 {
+      color: var(--accent);
+      margin-bottom: 0.5rem;
+    }
+
+    .project-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.4rem;
+      margin-top: 0.5rem;
+    }
+
+    .project-tags span {
+      background: rgba(255, 92, 138, 0.2);
+      color: var(--accent);
+      border-radius: 1rem;
+      padding: 0.25rem 0.7rem;
+      font-size: 0.8rem;
+    }
+
+    /* Buttons */
+    #prevBtn,
+    #nextBtn {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      background: rgba(255, 92, 138, 0.85);
+      border: none;
+      color: white;
+      padding: 0.9rem 1.1rem;
+      border-radius: 50%;
+      cursor: pointer;
+      transition: 0.3s;
+      z-index: 50;
+    }
+
+    #prevBtn:hover,
+    #nextBtn:hover {
+      background: var(--accent);
+      transform: translateY(-50%) scale(1.1);
+    }
+
+    #prevBtn {
+      left: 20px;
+    }
+
+    #nextBtn {
+      right: 20px;
+    }
+
+    /* Audio button */
+    #audioToggleBtn {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      background: rgba(18, 18, 18, 0.8);
+      border: 1px solid var(--accent);
+      color: white;
+      padding: 10px;
+      border-radius: 50%;
+      cursor: pointer;
+      z-index: 999;
+      transition: 0.3s;
+    }
+
+    #audioToggleBtn:hover {
+      background: var(--accent);
+      box-shadow: 0 0 15px rgba(255, 92, 138, 0.7);
+    }
+
+    .video-bg {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      z-index: -1;
+    }
+
+    .video-bg video {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+  </style>
+</head>
+
+<body>
+  <audio id="backgroundAudio" loop autoplay muted>
+    <source src="meditation-music-409195.mp3" type="audio/mpeg">
+  </audio>
+  <button id="audioToggleBtn"><i class="fas fa-volume-mute"></i></button>
+
+  <div id="slideshow">
+    <!-- Slide 1 -->
+    <div class="slide active">
+      <div class="video-bg">
+        <video autoplay loop muted playsinline>
+          <source src="magenta-nebula-moewalls-com.mp4" type="video/mp4">
+        </video>
+      </div>
+      <h1 class="slide-title">Xin chào, mình là Phạm Hà Trang! 🌌</h1>
+      <p class="slide-content">Sinh viên Truyền Thông & Tarot Reader chill với 4 năm kinh nghiệm. Cùng khám phá hành trình sáng tạo & nhẹ nhàng của mình nha 💫</p>
+      <p class="slide-subtext">Một chút năng lượng cosmic gửi bạn ✨</p>
+    </div>
+
+    <!-- Slide 2 -->
+    <div class="slide">
+      <div class="video-bg">
+        <video autoplay loop muted playsinline>
+          <source src="magenta-nebula-moewalls-com.mp4" type="video/mp4">
+        </video>
+      </div>
+      <h1 class="slide-title">Một chút về mình 🌸</h1>
+      <div class="content-with-image">
+        <ul>
+          <li>🎓 Học Truyền thông tại Đại học Đại Nam – GPA 3.08/4.0</li>
+          <li>🔮 Tarot Reader 4 năm – giúp bạn hiểu chính mình</li>
+          <li>💬 Tiếng Anh cơ bản, giao tiếp tự tin</li>
+          <li>🤝 CLB ICom & tình nguyện – kết nối cộng đồng vui lắm!</li>
+        </ul>
+        <img src="ảnh2.jpg" alt="Ảnh đại diện">
+      </div>
+    </div>
+
+    <!-- Slide 3 -->
+    <div class="slide">
+      <div class="video-bg">
+        <video autoplay loop muted playsinline>
+          <source src="magenta-nebula-moewalls-com.mp4" type="video/mp4">
+        </video>
+      </div>
+      <h1 class="slide-title">Kỹ năng & năng lượng sáng tạo 💡</h1>
+      <div class="content-with-image">
+        <ul>
+          <li>🎬 Viết & dựng video mượt mà – từ ý tưởng thành câu chuyện chill</li>
+          <li>🎨 Thiết kế infographic & visual aesthetic xinh xắn</li>
+          <li>🧘‍♀️ Tarot – thấu hiểu cảm xúc & tư vấn nhẹ nhàng</li>
+        </ul>
+        <img src="ảnh 5.jpg" alt="Kỹ năng">
+      </div>
+    </div>
+
+    <!-- Slide 4 -->
+    <div class="slide">
+      <div class="video-bg">
+        <video autoplay loop muted playsinline>
+          <source src="magenta-nebula-moewalls-com.mp4" type="video/mp4">
+        </video>
+      </div>
+      <h1 class="slide-title">Podcast Projects 🎧</h1>
+      <div class="project-grid">
+        <div class="project-card">
+          <img src="D:\\Lang thang Hà Nội.png" alt="Lang thang Hà Nội">
+          <div class="project-info">
+            <h3>Lang thang Hà Nội 🏙️</h3>
+            <p>Dạo quanh 36 phố phường, kể những câu chuyện bình dị.</p>
+            <div class="project-tags">
+              <span>Culture</span><span>Society</span><span>⭐61</span>
+            </div>
+          </div>
+        </div>
+        <div class="project-card">
+          <img src="D:\\Nếu đồ vật biết nói.png" alt="Nếu đồ vật biết nói">
+          <div class="project-info">
+            <h3>Nếu đồ vật biết nói 📦</h3>
+            <p>Nghe đồ vật kể chuyện – và hiểu chính mình hơn 🌙</p>
+            <div class="project-tags">
+              <span>Fiction</span><span>Storytelling</span><span>⭐14</span>
+            </div>
+          </div>
+        </div>
+        <div class="project-card">
+          <img src="D:\\Screenshot 2025-10-22 222742.png" alt="Share vần">
+          <div class="project-info">
+            <h3>Share vần ✍️</h3>
+            <p>Chia sẻ cảm xúc đời thường như tâm sự với bạn thân 💌</p>
+            <div class="project-tags">
+              <span>Books</span><span>Emotion</span><span>No rating</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Slide 5 -->
+    <div class="slide">
+      <div class="video-bg">
+        <video autoplay loop muted playsinline>
+          <source src="magenta-nebula-moewalls-com.mp4" type="video/mp4">
+        </video>
+      </div>
+      <h1 class="slide-title">Tarot Chat 🔮</h1>
+      <div class="content-with-image">
+        <ul>
+          <li>Coaching nhẹ nhàng qua bài Tarot – giúp bạn sắp xếp suy nghĩ</li>
+          <li>Chủ đề: Tình cảm & Hôn nhân | Công việc & Sự nghiệp | Định hướng cuộc sống</li>
+          <li>Bảng giá “hạt dẻ” cho buổi tâm sự sâu sắc 🌸</li>
+        </ul>
+        <img src="Screenshot 2025-09-04 191737.png" alt="Bảng giá">
+      </div>
+    </div>
+
+    <!-- Slide 6 -->
+    <div class="slide">
+      <div class="video-bg">
+        <video autoplay loop muted playsinline>
+          <source src="magenta-nebula-moewalls-com.mp4" type="video/mp4">
+        </video>
+      </div>
+      <h1 class="slide-title">Kết nối với mình ✨</h1>
+      <ul class="slide-content list-disc text-left max-w-md">
+        <li>Facebook: cukhoaitaymauvang.124 💌</li>
+        <li>Instagram: khongthichanhanh_0.4 📸</li>
+        <li>Email: cukhoaitay481@gmail.com 📧</li>
+        <li>Zalo/SĐT: 0345491694 📞</li>
+        <li>Địa chỉ: Đại học Đại Nam, Hà Nội 🏫</li>
+      </ul>
+      <img src="z6933741584171_ea53df3c7907b800087db8c7dbc75d97.jpg" alt="Ảnh nhóm">
+    </div>
+
+    <!-- Slide 7 -->
+    <div class="slide">
+      <div class="video-bg">
+        <video autoplay loop muted playsinline>
+          <source src="magenta-nebula-moewalls-com.mp4" type="video/mp4">
+        </video>
+      </div>
+      <h1 class="slide-title">Cảm ơn bạn ghé thăm 💖</h1>
+      <p class="slide-content">Hy vọng portfolio mang chút cảm hứng cosmic cho bạn. Hẹn gặp lại ở dự án tiếp theo nha! 🌌<br>- Trang Creative, 2025</p>
+      <p class="slide-subtext">✨ Giữ chill & năng lượng sáng tạo nhé!</p>
+    </div>
+  </div>
+
+  <button id="prevBtn"><i class="fas fa-arrow-left"></i></button>
+  <button id="nextBtn"><i class="fas fa-arrow-right"></i></button>
+
+  <script>
+    const slides = document.querySelectorAll('.slide');
+    let currentSlide = 0;
+
+    function showSlide(index) {
+      slides.forEach((slide, i) => {
+        slide.classList.remove('active', 'prev');
+        if (i === index) slide.classList.add('active');
+        else if (i === index - 1) slide.classList.add('prev');
+      });
+    }
+
+    function nextSlide() {
+      if (currentSlide < slides.length - 1) currentSlide++;
+      showSlide(currentSlide);
+    }
+
+    function prevSlide() {
+      if (currentSlide > 0) currentSlide--;
+      showSlide(currentSlide);
+    }
+
+    document.getElementById('nextBtn').addEventListener('click', nextSlide);
+    document.getElementById('prevBtn').addEventListener('click', prevSlide);
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowRight') nextSlide();
+      if (e.key === 'ArrowLeft') prevSlide();
+    });
+
+    showSlide(0);
+
+    // Audio toggle
+    const audio = document.getElementById('backgroundAudio');
+    const audioToggleBtn = document.getElementById('audioToggleBtn');
+    let isMuted = true;
+    audioToggleBtn.addEventListener('click', () => {
+      isMuted = !isMuted;
+      audio.muted = isMuted;
+      audioToggleBtn.innerHTML = isMuted ? '<i class="fas fa-volume-mute"></i>' : '<i class="fas fa-volume-up"></i>';
+      if (!isMuted) audio.play().catch(() => {});
+    });
+  </script>
+</body>
+</html>
